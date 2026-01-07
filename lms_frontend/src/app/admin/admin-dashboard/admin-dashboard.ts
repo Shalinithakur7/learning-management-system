@@ -92,13 +92,10 @@ export class AdminDashboardComponent implements OnInit {
     }
 
     loadStats() {
-        // Just stop loading spinner, cards are removed
         this.loading = false;
     }
 
     updateCardValues() {
-        console.log('updateCardValues called with stats:', this.stats);
-
         // Recreate the cards array to trigger change detection
         this.cards = [
             {
@@ -148,8 +145,6 @@ export class AdminDashboardComponent implements OnInit {
                 queryParams: { status: 'Pending' }
             }
         ];
-
-        console.log('Cards updated - Total Courses:', this.cards[3].value, 'Active:', this.cards[4].value, 'Pending:', this.cards[5].value);
     }
 
     navigateToCard(card: any) {

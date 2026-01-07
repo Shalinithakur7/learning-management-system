@@ -90,4 +90,13 @@ export class AdminService {
     getEnrollmentsPerCourse(): Observable<any[]> {
         return this.http.get<any[]>(`${this.api}/Admin/reports/enrollments-per-course`);
     }
+
+    // Notifications
+    getNotifications(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.api}/Notifications`);
+    }
+
+    markNotificationAsRead(id: number): Observable<any> {
+        return this.http.put(`${this.api}/Notifications/${id}/read`, {});
+    }
 }

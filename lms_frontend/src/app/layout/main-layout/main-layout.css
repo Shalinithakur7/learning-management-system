@@ -30,3 +30,55 @@
   background: #f8f9fa;
   min-height: calc(100vh - 56px);
 }
+
+/* Notification Styles */
+.notification-btn {
+  margin-right: 8px;
+}
+
+.notifications-header {
+  padding: 8px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.notifications-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.notifications-list {
+  max-height: 300px;
+  overflow-y: auto;
+  width: 320px;
+}
+
+.no-notifications {
+  padding: 16px;
+  text-align: center;
+  color: #777;
+}
+
+.notification-item-content {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  white-space: normal;
+  line-height: 1.4;
+}
+
+.message {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.time {
+  font-size: 11px;
+  color: #666;
+  margin-top: 4px;
+}
+
+/* Unread style for menu item */
+.unread {
+  background-color: #e3f2fd;
+}
