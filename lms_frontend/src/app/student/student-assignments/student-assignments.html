@@ -1,0 +1,91 @@
+<div class="assignments-container">
+    <!-- Header -->
+    <div class="page-header">
+        <h1>My Assignments</h1>
+        <p class="subtitle">Track and submit your course assignments</p>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-state">
+        <p>Loading assignments...</p>
+    </div>
+
+    <!-- Assignments Table -->
+    <mat-card *ngIf="!loading && assignments.length > 0">
+        <table mat-table [dataSource]="assignments" class="assignments-table">
+            <!-- Title Column -->
+            <ng-container matColumnDef="title">
+                <th mat-header-cell *matHeaderCellDef>Assignment</th>
+                <td mat-cell *matCellDef="let assignment">
+                    <div class="assignment-title">
+                        <strong>{{assignment.title}}</strong>
+                        <span *ngIf="assignment.grade" class="grade-badge">Grade: {{assignment.grade}}%</span>
+                    </div>
+                </td>
+            </ng-container>
+
+            <!-- Course Column -->
+            <ng-container matColumnDef="course">
+                <th mat-header-cell *matHeaderCellDef>Course</th>
+                <td mat-cell *matCellDef="let assignment">{{assignment.courseName}}</td>
+            </ng-container>
+
+            <!-- Due Date Column -->
+            <ng-container matColumnDef="dueDate">
+                <th mat-header-cell *matHeaderCellDef>Due Date</th>
+                <td mat-cell *matCellDef="let assignment">
+                    <div class="due-date">
+                        {{assignment.dueDate | date: 'MMM d, y'}}
+                        <span *ngIf="isOverdue(assignment.dueDate) && assignment.status === 'PENDING'"
+                            class="overdue-label">
+                            Overdue
+                        </span>
+                        <span
+                            *ngIf="!isOverdue(assignment.dueDate) && assignment.status === 'PENDING' && getDaysUntilDue(assignment.dueDate) <= 3"
+                            class="due-soon-label">
+                            Due in {{getDaysUntilDue(assignment.dueDate)}} days
+                        </span>
+                    </div>
+                </td>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let assignment">
+                    <mat-chip [color]="getStatusColor(assignment.status)">
+                        {{assignment.status}}
+                    </mat-chip>
+                </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                <td mat-cell *matCellDef="let assignment">
+                    <button mat-raised-button color="primary" (click)="submitAssignment(assignment)"
+                        *ngIf="assignment.status === 'PENDING'" [disabled]="isOverdue(assignment.dueDate)">
+                        <mat-icon>upload</mat-icon>
+                        Submit
+                    </button>
+                    <button mat-button (click)="viewAssignment(assignment)" *ngIf="assignment.status !== 'PENDING'">
+                        <mat-icon>visibility</mat-icon>
+                        View
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </mat-card>
+
+    <!-- Empty State -->
+    <mat-card *ngIf="!loading && assignments.length === 0" class="empty-state">
+        <mat-card-content>
+            <mat-icon>assignment</mat-icon>
+            <h3>No assignments yet</h3>
+            <p>Assignments from your enrolled courses will appear here</p>
+        </mat-card-content>
+    </mat-card>
+</div>

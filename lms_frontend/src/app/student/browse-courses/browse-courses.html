@@ -1,0 +1,55 @@
+<div class="browse-container">
+    <!-- Header -->
+    <div class="page-header">
+        <button mat-icon-button (click)="backToDashboard()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <div>
+            <h1>Browse All Courses</h1>
+            <p class="subtitle">Explore our course catalog and start learning</p>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-state">
+        <p>Loading courses...</p>
+    </div>
+
+    <!-- Courses Grid -->
+    <div *ngIf="!loading" class="courses-grid">
+        <mat-card *ngFor="let course of courses" class="course-card">
+            <mat-card-header>
+                <mat-card-title>{{course.title}}</mat-card-title>
+                <mat-card-subtitle>by {{course.instructorName}}</mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content>
+                <p class="course-description">{{course.description}}</p>
+
+                <div class="course-meta">
+                    <div class="price">
+                        <mat-icon>currency_rupee</mat-icon>
+                        <span>{{course.price}}</span>
+                    </div>
+                    <mat-chip color="primary">{{course.status}}</mat-chip>
+                </div>
+            </mat-card-content>
+
+            <mat-card-actions>
+                <button mat-raised-button
+                    [color]="getEnrollmentStatus(course.id)?.toUpperCase() === 'REJECTED' ? 'warn' : 'primary'"
+                    (click)="handleCourseAction(course)" [disabled]="isButtonDisabled(course)">
+                    <mat-icon>{{getButtonIcon(course)}}</mat-icon>
+                    {{getButtonText(course)}}
+                </button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && courses.length === 0" class="empty-state">
+        <mat-icon>school</mat-icon>
+        <h3>No courses available</h3>
+        <p>Check back later for new courses</p>
+    </div>
+</div>

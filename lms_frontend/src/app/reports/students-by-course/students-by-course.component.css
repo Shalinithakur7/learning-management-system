@@ -1,0 +1,76 @@
+.report-container {
+    padding: 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.header {
+    margin-bottom: 24px;
+}
+
+.header h1 {
+    font-size: 2rem;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.header p {
+    color: #666;
+    font-size: 1rem;
+}
+
+.loading-spinner {
+    margin: 20px 0;
+}
+
+.no-data {
+    text-align: center;
+    padding: 40px;
+    color: #888;
+    background: white;
+    border-radius: 8px;
+    border: 1px dashed #ccc;
+}
+
+.no-data mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+mat-accordion {
+    display: block;
+}
+
+mat-expansion-panel {
+    margin-bottom: 8px;
+    border-radius: 4px !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05) !important;
+}
+
+mat-panel-title {
+    font-weight: 500;
+    font-size: 1rem;
+    color: #333;
+}
+
+mat-panel-description {
+    justify-content: flex-end;
+    align-items: center;
+    color: #666;
+}
+
+mat-panel-description mat-icon {
+    margin-left: 8px;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.text-muted {
+    color: #999;
+    font-style: italic;
+}

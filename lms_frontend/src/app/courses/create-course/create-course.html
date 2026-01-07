@@ -1,0 +1,229 @@
+<div class="create-course-container">
+  <mat-card class="stepper-card">
+
+    <div class="header-section">
+      <h2>{{ isEditMode ? 'Edit Course' : 'Create New Course' }}</h2>
+      <p class="subtitle-text">Build your course in a few simple steps.</p>
+    </div>
+
+    <mat-card-content>
+      <mat-stepper #stepper [linear]="true" class="custom-stepper">
+
+        <mat-step [stepControl]="courseForm" label="Course Basics">
+          <form [formGroup]="courseForm" class="step-form-container">
+            <div class="form-card">
+              <div class="card-header">
+                <mat-icon class="header-icon">info</mat-icon>
+                <h3>Basic Information</h3>
+              </div>
+
+              <div class="form-fields">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Course Title</mat-label>
+                  <input matInput formControlName="title" placeholder="e.g. Advanced Angular Masterclass" required>
+                  <mat-error *ngIf="courseForm.get('title')?.hasError('required')">Title is required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Description</mat-label>
+                  <textarea matInput formControlName="description" rows="5" placeholder="What will students learn?"
+                    required></textarea>
+                  <mat-error *ngIf="courseForm.get('description')?.hasError('required')">Description is
+                    required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>Price (₹)</mat-label>
+                  <input matInput type="number" formControlName="price" min="0" required>
+                  <mat-icon matPrefix>currency_rupee</mat-icon>
+                  <mat-error *ngIf="courseForm.get('price')?.hasError('min')">Price cannot be negative</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-actions">
+                <button mat-flat-button color="primary" class="action-btn" (click)="createCourse(stepper)"
+                  [disabled]="courseForm.invalid || isCreating">
+                  @if (isCreating) {
+                  <div class="loading-wrapper">
+                    <mat-spinner diameter="20" class="white-spinner"></mat-spinner>
+                    <span>Saving...</span>
+                  </div>
+                  } @else {
+                  <span class="btn-content-wrapper">
+                    <span>{{ isEditMode ? 'Update & Continue' : 'Create Draft & Continue' }}</span>
+                    <mat-icon>arrow_forward</mat-icon>
+                  </span>
+                  }
+                </button>
+              </div>
+            </div>
+          </form>
+        </mat-step>
+
+        <mat-step label="Curriculum Builder" [completed]="modules.length > 0">
+          <div class="curriculum-builder-container">
+
+            <div class="builder-header">
+              <div class="header-info">
+                <h3>Curriculum</h3>
+                <p>Organize your course into modules and lessons.</p>
+              </div>
+              <div class="header-actions">
+                <mat-form-field appearance="outline" class="module-title-input" subscriptSizing="dynamic">
+                  <mat-label>New Module Title</mat-label>
+                  <input matInput [(ngModel)]="newModuleTitle" placeholder="e.g. Introduction">
+                </mat-form-field>
+                <button mat-raised-button color="primary" (click)="addModule()" [disabled]="!newModuleTitle">
+                  <mat-icon>add</mat-icon> Add Module
+                </button>
+              </div>
+            </div>
+
+            <div class="modules-list">
+              @for (module of modules; track module; let i = $index) {
+              <div class="module-card">
+
+                <div class="module-header color-header-{{ i % 5 }}">
+                  <div class="module-title-group">
+                    <mat-icon class="module-icon">folder_open</mat-icon>
+                    <span class="module-title-text">{{ module.title }}</span>
+                    <span class="lesson-count-badge">{{ module.lessons.length }} Lessons</span>
+                  </div>
+                  <button mat-icon-button class="delete-module-btn" (click)="deleteModule(i)"
+                    matTooltip="Delete Module">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+
+                <div class="module-content">
+
+                  <div class="lessons-list">
+                    @for (lesson of module.lessons; track lesson; let j = $index) {
+                    <div class="lesson-row">
+                      <div class="lesson-info">
+                        <mat-icon class="lesson-type-icon"
+                          [ngClass]="{'video-icon': lesson.videoUrl, 'text-icon': !lesson.videoUrl}">
+                          {{ lesson.videoUrl ? 'play_circle' : 'article' }}
+                        </mat-icon>
+                        <span class="lesson-title">{{ lesson.title }}</span>
+                      </div>
+                      <button mat-icon-button color="warn" class="delete-lesson-btn" (click)="deleteLesson(i, j)"
+                        matTooltip="Delete Lesson">
+                        <mat-icon>delete_outline</mat-icon>
+                      </button>
+                    </div>
+                    }
+
+                    @if(module.lessons.length === 0) {
+                    <div class="empty-lessons-placeholder">
+                      <p>No lessons in this module yet.</p>
+                    </div>
+                    }
+                  </div>
+
+                  <div class="add-lesson-section">
+                    <mat-expansion-panel class="add-lesson-panel" #lessonPanel>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>
+                          <mat-icon>add_circle_outline</mat-icon> Add Lesson
+                        </mat-panel-title>
+                      </mat-expansion-panel-header>
+
+                      <div class="new-lesson-form">
+                        <mat-form-field appearance="outline" class="full-width">
+                          <mat-label>Lesson Title</mat-label>
+                          <input matInput [(ngModel)]="module.newLessonTitle"
+                            placeholder="e.g. Introduction to Variables">
+                        </mat-form-field>
+
+                        <div class="lesson-type-toggle">
+                          <label>Content Type:</label>
+                          <mat-button-toggle-group [(ngModel)]="module.newLessonType" aria-label="Lesson Type">
+                            <mat-button-toggle value="video"><mat-icon>videocam</mat-icon> Video</mat-button-toggle>
+                            <mat-button-toggle value="text"><mat-icon>description</mat-icon>
+                              Text/Link</mat-button-toggle>
+                            <mat-button-toggle value="pdf"><mat-icon>picture_as_pdf</mat-icon> PDF</mat-button-toggle>
+                          </mat-button-toggle-group>
+                        </div>
+
+                        <div class="content-input-area" *ngIf="module.newLessonType === 'video'">
+                          <div class="file-upload-wrapper">
+                            <input type="file" (change)="onFileSelected($event, i)" accept="video/*" class="file-input"
+                              id="video-upload-{{i}}">
+                            <label for="video-upload-{{i}}" class="file-upload-label">
+                              <mat-icon>cloud_upload</mat-icon>
+                              <span>{{ module.selectedFileName || 'Choose Video File' }}</span>
+                            </label>
+                          </div>
+                        </div>
+
+                        <div class="content-input-area" *ngIf="module.newLessonType === 'text'">
+                          <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Content / URL</mat-label>
+                            <textarea matInput [(ngModel)]="module.newLessonContent" rows="3"
+                              placeholder="Enter text content or external link..."></textarea>
+                          </mat-form-field>
+                        </div>
+
+                        <div class="content-input-area" *ngIf="module.newLessonType === 'pdf'">
+                          <div class="file-upload-box">
+                            <button mat-stroked-button color="primary" (click)="pdfInput.click()">
+                              <mat-icon>picture_as_pdf</mat-icon> Upload PDF Document
+                            </button>
+                            <input #pdfInput type="file" (change)="onFileSelected($event, i)" accept="application/pdf"
+                              style="display:none">
+                            <span class="file-name" *ngIf="module.selectedFile">{{ module.selectedFile.name }}</span>
+                          </div>
+                        </div>
+
+                        <div class="add-btn-wrapper">
+                          <button mat-raised-button color="accent" (click)="addLesson(i)"
+                            [disabled]="!module.newLessonTitle">
+                            <mat-icon>playlist_add</mat-icon> Add to Module
+                          </button>
+                        </div>
+
+                      </div>
+                    </mat-expansion-panel>
+                  </div>
+                </div>
+              </div> }
+            </div>
+
+            <div class="action-buttons floating-footer">
+              <button mat-button matStepperPrevious><mat-icon>arrow_back</mat-icon> Back</button>
+              <button mat-flat-button color="primary" matStepperNext>Review Course
+                <mat-icon>arrow_forward</mat-icon></button>
+            </div>
+          </div>
+        </mat-step>
+
+        <mat-step label="Review & Finish">
+          <div class="review-section">
+            <div class="success-icon-wrapper">
+              <mat-icon class="large-success-icon">check_circle</mat-icon>
+            </div>
+            <h3>Ready to Submit for Approval!</h3>
+            <p>Your course <strong>{{ courseForm.get('title')?.value }}</strong> has been configured with {{
+              modules.length }} modules.</p>
+
+            <div class="review-details">
+              <p><strong>Price:</strong> {{ courseForm.get('price')?.value | currency:'INR' }}</p>
+              <p><strong>Description:</strong> {{ courseForm.get('description')?.value }}</p>
+            </div>
+
+            <div class="action-buttons center-actions">
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-raised-button color="primary" class="finish-btn" (click)="finish()">
+                Send for Approval <mat-icon>send</mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-step>
+
+
+
+      </mat-stepper>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,41 @@
+<div class="report-container">
+    <div class="header">
+        <h1>Students Grouped by Course</h1>
+        <p>List of students enrolled in each approved course.</p>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-spinner">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+
+    <div *ngIf="!isLoading && courseGroups.length === 0" class="no-data">
+        <mat-icon>info</mat-icon>
+        <p>No enrollment data found.</p>
+    </div>
+
+    <mat-accordion class="headers-align" multi>
+        <mat-expansion-panel *ngFor="let group of courseGroups" hideToggle>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{ group.courseTitle }}
+                </mat-panel-title>
+                <mat-panel-description>
+                    {{ group.studentNames.length }} Student(s)
+                    <mat-icon>group</mat-icon>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-list>
+                <div mat-subheader>Enrolled Students</div>
+                <mat-list-item *ngFor="let student of group.studentNames">
+                    <mat-icon matListItemIcon>person</mat-icon>
+                    <div matListItemTitle>{{ student }}</div>
+                </mat-list-item>
+                <mat-list-item *ngIf="group.studentNames.length === 0">
+                    <div matListItemTitle class="text-muted">No students enrolled yet.</div>
+                </mat-list-item>
+            </mat-list>
+
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>

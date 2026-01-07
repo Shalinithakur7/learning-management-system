@@ -1,0 +1,76 @@
+<nav class="sidebar">
+  <!-- Admin Menu -->
+  @if (role === 'Admin') {
+  <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+    <mat-icon>dashboard</mat-icon> Dashboard
+  </a>
+  <a routerLink="/admin/users" routerLinkActive="active">
+    <mat-icon>people</mat-icon> Users
+  </a>
+  <a routerLink="/admin/courses" routerLinkActive="active">
+    <mat-icon>menu_book</mat-icon> Courses
+  </a>
+  <a (click)="navigate('/admin/enrollments')" [class.active]="isActive('/admin/enrollments')">
+    <mat-icon>how_to_reg</mat-icon> Enrollments
+  </a>
+  <div class="sidebar-divider">REPORTS</div>
+  <a (click)="navigate('/reports/enrollments')" [class.active]="isActive('/reports/enrollments')">
+    <mat-icon>bar_chart</mat-icon> Enrollment Stats
+  </a>
+  <a (click)="navigate('/reports/students-by-course')" [class.active]="isActive('/reports/students-by-course')">
+    <mat-icon>group_work</mat-icon> Students Grouped
+  </a>
+  <a (click)="navigate('/reports/submissions')" [class.active]="isActive('/reports/submissions')">
+    <mat-icon>assignment_turned_in</mat-icon> Submissions
+  </a>
+  <a (click)="navigate('/reports/progress')" [class.active]="isActive('/reports/progress')">
+    <mat-icon>trending_up</mat-icon> Progress
+  </a>
+  }
+
+  <!-- Instructor Menu -->
+  @if (role === 'Instructor' || role === 'INSTRUCTOR') {
+  <a routerLink="/dashboard" routerLinkActive="active">
+    <mat-icon>dashboard</mat-icon> Dashboard
+  </a>
+  <a routerLink="/courses/my" routerLinkActive="active">
+    <mat-icon>menu_book</mat-icon> My Courses
+  </a>
+  <a routerLink="/assignments" routerLinkActive="active">
+    <mat-icon>assignment</mat-icon> Assignments
+  </a>
+  <a routerLink="/submissions" routerLinkActive="active">
+    <mat-icon>inbox</mat-icon> Submissions
+  </a>
+  <div class="sidebar-divider">REPORTS</div>
+  <a routerLink="/reports/enrollments" routerLinkActive="active">
+    <mat-icon>bar_chart</mat-icon> Enrollment Stats
+  </a>
+  <a routerLink="/reports/students-by-course" routerLinkActive="active">
+    <mat-icon>group_work</mat-icon> Students Grouped
+  </a>
+  <a routerLink="/reports/submissions" routerLinkActive="active">
+    <mat-icon>assignment_turned_in</mat-icon> Submissions
+  </a>
+  <a routerLink="/reports/progress" routerLinkActive="active">
+    <mat-icon>trending_up</mat-icon> Progress
+  </a>
+  }
+
+  <!-- Student Menu -->
+  @if (role === 'Student' || role === 'STUDENT') {
+  <a (click)="navigate('/student/dashboard')" [class.active]="isActive('/student/dashboard')">
+    <mat-icon>dashboard</mat-icon> Dashboard
+  </a>
+  <a (click)="navigate('/student/browse-courses')" [class.active]="isActive('/student/browse-courses')">
+    <mat-icon>search</mat-icon> Browse Courses
+  </a>
+  <a (click)="navigate('/student/assignments')" [class.active]="isActive('/student/assignments')">
+    <mat-icon>assignment</mat-icon> My Assignments
+  </a>
+  }
+
+  <button mat-button class="logout" (click)="logout()">
+    <mat-icon>logout</mat-icon> Logout
+  </button>
+</nav>

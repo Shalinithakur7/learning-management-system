@@ -1,0 +1,49 @@
+<div class="auth-background">
+  <mat-card class="auth-card">
+    <div class="auth-header">
+      <div class="auth-title">Welcome Back</div>
+      <div class="auth-subtitle">Sign in to continue to LMS</div>
+    </div>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="login()">
+        
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email Address</mat-label>
+          <input matInput formControlName="email" placeholder="name@example.com">
+          <mat-error *ngIf="form.get('email')?.hasError('email')">
+            Please enter a valid email address
+          </mat-error>
+          <mat-error *ngIf="form.get('email')?.hasError('required')">
+            Email is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+          <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error *ngIf="form.get('password')?.hasError('required')">
+            Password is required
+          </mat-error>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" class="full-width" type="submit" 
+                [disabled]="form.invalid || isLoading" style="height: 48px; font-size: 16px; margin-top: 16px;">
+          @if (isLoading) {
+            <mat-spinner diameter="24" color="accent" style="display:inline-block; vertical-align:middle;"></mat-spinner>
+          } @else {
+            Sign In
+          }
+        </button>
+
+        <div style="margin-top: 24px; text-align: center; color: #666;">
+          Don't have an account? 
+          <a routerLink="/register" style="color: #667eea; text-decoration: none; font-weight: 500;">Register here</a>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

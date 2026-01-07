@@ -1,0 +1,45 @@
+/* Global Styles */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+  background-color: #f5f7fa;
+}
+
+.auth-background {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.auth-card {
+  max-width: 450px !important;
+  width: 100%;
+  border-radius: 16px !important;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+  overflow: hidden;
+}
+
+.auth-header {
+  text-align: center;
+  padding: 2rem 0 1rem;
+}
+
+.auth-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.auth-subtitle {
+  color: #666;
+  font-size: 1rem;
+}
+
+.full-width {
+  width: 100%;
+}

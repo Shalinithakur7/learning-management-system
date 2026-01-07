@@ -1,0 +1,72 @@
+.form-container {
+    padding: 24px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+mat-card {
+    padding: 24px;
+}
+
+mat-card-header {
+    margin-bottom: 24px;
+}
+
+h2 {
+    margin: 0;
+    color: #333;
+}
+
+.full-width {
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.form-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.half-width {
+    flex: 1;
+}
+
+.form-section {
+    margin-bottom: 24px;
+}
+
+.section-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.publish-section {
+    padding: 16px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+}
+
+.helper-text {
+    margin: 8px 0 0 0;
+    font-size: 12px;
+    color: #666;
+}
+
+mat-card-actions {
+    padding: 16px 0 0 0;
+    gap: 8px;
+}
+
+mat-card-actions button {
+    margin-left: 8px;
+}

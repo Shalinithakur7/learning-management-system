@@ -1,0 +1,115 @@
+<div class="course-details-container" *ngIf="course; else loading">
+
+  <!-- Back Button -->
+  <button mat-button class="back-btn" routerLink="/dashboard">
+    <mat-icon>arrow_back</mat-icon> Back to Dashboard
+  </button>
+
+  <!-- Header Banner -->
+  <div class="course-header">
+    <h1 class="course-title">{{ course.title }}</h1>
+    <div class="header-meta">
+      <mat-chip class="price-chip">{{ course.price | currency:'INR' }}</mat-chip>
+      <mat-chip class="modules-chip">
+        <mat-icon>folder</mat-icon> {{ course.modules?.length || 0 }} Modules
+      </mat-chip>
+    </div>
+    <p class="course-description">{{ course.description }}</p>
+  </div>
+
+  <!-- Curriculum -->
+  <div class="curriculum-section">
+    <h3><mat-icon>library_books</mat-icon> Course Curriculum</h3>
+
+    @if (course.modules && course.modules.length > 0) {
+    <mat-accordion multi>
+      @for (module of course.modules; track module.id) {
+      <mat-expansion-panel class="module-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon class="module-icon">folder_open</mat-icon>
+            <strong>{{ module.title }}</strong>
+          </mat-panel-title>
+          <mat-panel-description>
+            {{ module.lessons?.length || 0 }} Lessons
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <!-- Lessons List -->
+        <mat-list>
+          @for (lesson of module.lessons; track lesson.id) {
+          <mat-list-item class="lesson-item">
+            <mat-icon matListItemIcon class="lesson-icon">
+              {{ lesson.videoUrl ? 'play_circle' : 'description' }}
+            </mat-icon>
+            <span matListItemTitle class="lesson-title">{{ lesson.title }}</span>
+            <button mat-icon-button matListItemMeta (click)="viewLesson(lesson)" matTooltip="View Lesson">
+              <mat-icon>visibility</mat-icon>
+            </button>
+          </mat-list-item>
+          }
+          @if (!module.lessons || module.lessons.length === 0) {
+          <p class="no-lessons-msg">No lessons in this module yet.</p>
+          }
+        </mat-list>
+      </mat-expansion-panel>
+      }
+    </mat-accordion>
+    } @else {
+    <div class="empty-state">
+      <mat-icon>sentiment_dissatisfied</mat-icon>
+      <p>No content has been added to this course yet.</p>
+    </div>
+    }
+  </div>
+</div>
+
+<!-- Lesson Viewer Modal -->
+@if (selectedLesson) {
+<div class="lesson-overlay" (click)="closeLesson()">
+  <div class="lesson-viewer" (click)="$event.stopPropagation()">
+    <div class="lesson-viewer-header">
+      <h2>{{ selectedLesson.title }}</h2>
+      <button mat-icon-button (click)="closeLesson()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="lesson-viewer-content">
+      @if (selectedLesson.videoUrl) {
+      <div class="video-container">
+        @if (selectedLesson.videoUrl.startsWith('/uploads/')) {
+        <video controls class="lesson-video">
+          <source [src]="'http://localhost:5012' + selectedLesson.videoUrl" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        } @else {
+        <div class="external-video-link">
+          <mat-icon>videocam</mat-icon>
+          <a [href]="selectedLesson.videoUrl" target="_blank" mat-raised-button color="primary">
+            <mat-icon>play_arrow</mat-icon> Open Video in New Tab
+          </a>
+        </div>
+        }
+      </div>
+      }
+      @if (selectedLesson.content) {
+      <div class="lesson-text-content">
+        <h3>Lesson Content</h3>
+        <p>{{ selectedLesson.content }}</p>
+      </div>
+      }
+      @if (!selectedLesson.videoUrl && !selectedLesson.content) {
+      <p class="no-content-msg">No content available for this lesson.</p>
+      }
+    </div>
+  </div>
+</div>
+}
+
+<ng-template #loading>
+  <div class="empty-state">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading course details...</p>
+  </div>
+</ng-template>

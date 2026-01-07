@@ -1,0 +1,64 @@
+<div class="report-container">
+    <div class="header">
+        <h1>Assignment Submissions</h1>
+        <p>Track student submissions pending vs completed.</p>
+    </div>
+
+    <mat-card class="table-card">
+        <div class="filter-container">
+            <input class="filter-input" (keyup)="applyFilter($event)" placeholder="Filter assignments..." #input>
+            <mat-icon>search</mat-icon>
+        </div>
+
+        <div class="table-container">
+            <table mat-table [dataSource]="dataSource" matSort>
+
+                <!-- Assignment Title Column -->
+                <ng-container matColumnDef="assignmentTitle">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Assignment </th>
+                    <td mat-cell *matCellDef="let row"> {{row.assignmentTitle}} </td>
+                </ng-container>
+
+                <!-- Course Title Column -->
+                <ng-container matColumnDef="courseTitle">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Course </th>
+                    <td mat-cell *matCellDef="let row"> {{row.courseTitle}} </td>
+                </ng-container>
+
+                <!-- Total Submissions Column -->
+                <ng-container matColumnDef="totalSubmissions">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Submitted </th>
+                    <td mat-cell *matCellDef="let row">
+                        <span class="stat-value">{{row.totalSubmissions}}</span>
+                    </td>
+                </ng-container>
+
+                <!-- Total Students Column -->
+                <ng-container matColumnDef="totalStudents">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Total Students </th>
+                    <td mat-cell *matCellDef="let row">
+                        <span class="stat-value">{{row.totalStudents}}</span>
+                    </td>
+                </ng-container>
+
+                <!-- Pending Column -->
+                <ng-container matColumnDef="pendingSubmissions">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Pending </th>
+                    <td mat-cell *matCellDef="let row">
+                        <span class="badge pending-badge"
+                            [class.warning]="row.pendingSubmissions > 0">{{row.pendingSubmissions}}</span>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="5">No data matching the filter "{{input.value}}"</td>
+                </tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of submissions"></mat-paginator>
+        </div>
+    </mat-card>
+</div>

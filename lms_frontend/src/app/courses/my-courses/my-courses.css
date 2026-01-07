@@ -1,0 +1,63 @@
+.courses-container {
+    padding: 24px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.header h1 {
+    margin: 0;
+    color: #333;
+}
+
+.search-field {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    min-height: 400px;
+    margin-top: 16px;
+}
+
+table {
+    width: 100%;
+}
+
+.mat-mdc-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+td,
+th {
+    padding: 12px 8px;
+}
+
+.rejection-reason-cell {
+    max-width: 250px;
+}
+
+.reason-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: help;
+    color: #555;
+}
+
+.inline-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+    color: #f44336;
+}

@@ -1,0 +1,14 @@
+<div style="padding:20px;">
+  <mat-card *ngFor="let c of courses" style="margin-bottom:12px;">
+    <p>Course ID: {{ c.courseId }}</p>
+    <p>Status: {{ c.status }}</p>
+
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="enroll(c.courseId)"
+      [disabled]="c.status === 'Approved'">
+      Enroll
+    </button>
+  </mat-card>
+</div>

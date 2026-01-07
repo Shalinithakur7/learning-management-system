@@ -1,0 +1,59 @@
+.users-container {
+    padding: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.header {
+    margin-bottom: 24px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 500;
+    color: #333;
+}
+
+.subtitle {
+    margin: 8px 0 0 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.filters {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.filters mat-form-field {
+    flex: 1;
+    max-width: 300px;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+}
+
+.mat-column-actions {
+    width: 150px;
+    text-align: right;
+}
+
+.rejection-reason {
+    margin-top: 4px;
+    color: #f44336;
+}
+
+.rejection-reason small {
+    font-size: 11px;
+}
+
+mat-chip {
+    font-size: 12px;
+}

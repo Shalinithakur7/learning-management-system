@@ -1,0 +1,67 @@
+.enrollments-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.page-header {
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.content-wrapper {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.loading-state,
+.empty-state {
+    padding: 40px;
+    text-align: center;
+    color: #666;
+}
+
+.empty-state mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    margin-bottom: 10px;
+    color: #4caf50;
+}
+
+.enrollments-table {
+    width: 100%;
+}
+
+.student-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.student-info .name {
+    font-weight: 500;
+}
+
+.student-info .email {
+    font-size: 12px;
+    color: #666;
+}
+
+.course-title {
+    font-weight: 500;
+    color: #1976d2;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+button mat-icon {
+    margin-right: 4px;
+}

@@ -1,0 +1,14 @@
+<mat-card style="max-width:500px;margin:40px auto;">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <mat-form-field style="width:100%">
+      <mat-label>File Path</mat-label>
+      <input matInput formControlName="filePath">
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" style="width:100%">
+      Submit Assignment
+    </button>
+
+  </form>
+</mat-card>

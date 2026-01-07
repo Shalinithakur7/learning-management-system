@@ -1,0 +1,131 @@
+<div class="dashboard-container">
+    <!-- Header -->
+    <div class="dashboard-header">
+        <h1>Welcome back, Student!</h1>
+        <p class="subtitle">Learning progress overview</p>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="stats-grid">
+        <mat-card class="stat-card">
+            <mat-card-content>
+                <div class="stat-icon">
+                    <mat-icon>school</mat-icon>
+                </div>
+                <div class="stat-info">
+                    <h2>{{stats.enrolledCourses}}</h2>
+                    <p>Enrolled Courses</p>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card class="stat-card">
+            <mat-card-content>
+                <div class="stat-icon">
+                    <mat-icon>assignment</mat-icon>
+                </div>
+                <div class="stat-info">
+                    <h2>{{stats.pendingAssignments}}</h2>
+                    <p>Assignments Pending</p>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card class="stat-card">
+            <mat-card-content>
+                <div class="stat-icon">
+                    <mat-icon>check_circle</mat-icon>
+                </div>
+                <div class="stat-info">
+                    <h2>{{stats.lessonsCompleted}}</h2>
+                    <p>Lessons Completed</p>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card class="stat-card">
+            <mat-card-content>
+                <div class="stat-icon">
+                    <mat-icon>trending_up</mat-icon>
+                </div>
+                <div class="stat-info">
+                    <h2>{{stats.averageProgress}}%</h2>
+                    <p>Average Progress</p>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <!-- My Courses Section -->
+    <div class="my-courses-section">
+        <div class="section-header">
+            <h2>My Courses</h2>
+            <button mat-raised-button color="primary" (click)="browseCourses()">
+                <mat-icon>add</mat-icon>
+                Browse All Courses
+            </button>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="loading" class="loading-state">
+            <p>Loading courses...</p>
+        </div>
+
+        <!-- Empty State -->
+        <mat-card *ngIf="!loading && enrolledCourses.length === 0" class="empty-state">
+            <mat-card-content>
+                <mat-icon>school</mat-icon>
+                <h3>No courses enrolled yet</h3>
+                <p>Start your learning journey by browsing our course catalog</p>
+                <button mat-raised-button color="primary" (click)="browseCourses()">
+                    Browse All Courses
+                </button>
+            </mat-card-content>
+        </mat-card>
+
+        <!-- Course Cards -->
+        <div *ngIf="!loading && enrolledCourses.length > 0" class="courses-grid">
+            <mat-card *ngFor="let course of enrolledCourses" class="course-card">
+                <mat-card-header>
+                    <mat-card-title>{{course.courseName}}</mat-card-title>
+                    <mat-card-subtitle>Instructor: {{course.instructorName}}</mat-card-subtitle>
+                </mat-card-header>
+
+                <mat-card-content>
+                    <div class="course-status">
+                        <mat-chip [color]="getStatusColor(course.status)">
+                            {{isApproved(course.status) ? 'Enrolled' : course.status}}
+                        </mat-chip>
+                    </div>
+
+                    <div class="progress-section" *ngIf="isApproved(course.status)">
+                        <div class="progress-label">
+                            <span>Progress</span>
+                            <span class="progress-value">{{course.progress}}%</span>
+                        </div>
+                        <mat-progress-bar mode="determinate" [value]="course.progress"></mat-progress-bar>
+                    </div>
+
+                    <div class="pending-message"
+                        *ngIf="!isApproved(course.status) && course.status.toUpperCase() !== 'REJECTED'">
+                        <mat-icon>hourglass_empty</mat-icon>
+                        <p>Waiting for instructor approval</p>
+                    </div>
+                </mat-card-content>
+
+                <mat-card-actions>
+                    <button mat-raised-button
+                        [color]="isApproved(course.status) ? 'primary' : (course.status.toUpperCase() === 'REJECTED' ? 'warn' : '')"
+                        [disabled]="!isApproved(course.status) && course.status.toUpperCase() !== 'REJECTED'"
+                        (click)="continueLearning(course)">
+                        <mat-icon>{{isApproved(course.status) ? 'play_arrow' : (course.status.toUpperCase() ===
+                            'REJECTED' ?
+                            'refresh' : 'lock')}}</mat-icon>
+                        {{isApproved(course.status) ? 'View Course' : (course.status.toUpperCase() === 'REJECTED' ?
+                        'Re-Apply' : 'Pending Approval')}}
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </div>
+</div>

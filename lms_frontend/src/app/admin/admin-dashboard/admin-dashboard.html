@@ -1,0 +1,34 @@
+<div class="dashboard-container">
+    <div class="header">
+        <h1>Admin Dashboard</h1>
+        <p class="subtitle">System Overview and Management</p>
+    </div>
+
+    <div *ngIf="loading" class="loading-container">
+        <mat-spinner></mat-spinner>
+    </div>
+
+    <!-- Stats Grid (Removed per user request) -->
+    <!-- <div *ngIf="!loading" class="stats-grid">...</div> -->
+
+    <div *ngIf="!loading" class="quick-actions">
+        <h2>Quick Actions</h2>
+        <div class="actions-grid">
+            <button mat-raised-button color="primary" routerLink="/admin/users">
+                <mat-icon>people</mat-icon> Manage Users
+            </button>
+            <button mat-raised-button color="accent" routerLink="/admin/courses">
+                <mat-icon>menu_book</mat-icon> Manage Courses
+            </button>
+            <button mat-raised-button color="primary" routerLink="/admin/categories">
+                <mat-icon>category</mat-icon> Manage Categories
+            </button>
+            <button mat-raised-button color="accent" routerLink="/admin/enrollments">
+                <mat-icon>school</mat-icon> View Enrollments
+            </button>
+            <button mat-raised-button color="primary" routerLink="/admin/reports">
+                <mat-icon>bar_chart</mat-icon> View Reports
+            </button>
+        </div>
+    </div>
+</div>

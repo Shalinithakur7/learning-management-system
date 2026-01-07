@@ -1,0 +1,168 @@
+<div class="assignments-container">
+  <div class="header">
+    <h1>Course Assignments</h1>
+  </div>
+
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Search Courses</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mathematics" #input>
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <div class="mat-elevation-z8 table-container">
+    <table mat-table [dataSource]="dataSource" matSort multiTemplateDataRows>
+
+      <!-- Course Title Column -->
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Course Title </th>
+        <td mat-cell *matCellDef="let course">
+          <strong>{{course.title}}</strong>
+        </td>
+      </ng-container>
+
+      <!-- Total Assignments Column -->
+      <ng-container matColumnDef="totalAssignments">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Total Assignments </th>
+        <td mat-cell *matCellDef="let course"> {{course.totalAssignments}} </td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+        <td mat-cell *matCellDef="let course">
+          <mat-chip [color]="course.isPublished ? 'primary' : 'warn'">
+            {{course.isPublished ? 'Published' : 'Draft'}}
+          </mat-chip>
+        </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let course">
+          <button mat-raised-button color="primary" (click)="addAssignment(course.id)" class="action-btn">
+            <mat-icon>add</mat-icon> Add Assignment
+          </button>
+          <button mat-icon-button color="accent" (click)="toggleCourse(course)" matTooltip="View Assignments">
+            <mat-icon>{{course.expanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- Expanded Content Column - the detail row is made up of this one column that spans across all columns -->
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let course" [attr.colspan]="displayedColumns.length">
+          <div class="course-detail" [@detailExpand]="course.expanded ? 'expanded' : 'collapsed'">
+            <div class="assignments-table-wrapper" *ngIf="course.expanded">
+              <h3>Assignments for {{course.title}}</h3>
+
+              <div *ngIf="course.assignments.length === 0" class="empty-state">
+                <mat-icon>assignment</mat-icon>
+                <p>No assignments created yet for this course.</p>
+                <button mat-raised-button color="primary" (click)="addAssignment(course.id)">
+                  Create First Assignment
+                </button>
+              </div>
+
+              <table mat-table [dataSource]="course.assignments" *ngIf="course.assignments.length > 0"
+                class="assignments-table">
+
+                <!-- Assignment Title -->
+                <ng-container matColumnDef="title">
+                  <th mat-header-cell *matHeaderCellDef> Title </th>
+                  <td mat-cell *matCellDef="let assignment"> {{assignment.title}} </td>
+                </ng-container>
+
+                <!-- Description -->
+                <ng-container matColumnDef="description">
+                  <th mat-header-cell *matHeaderCellDef> Description </th>
+                  <td mat-cell *matCellDef="let assignment"> {{assignment.description | slice:0:50}}... </td>
+                </ng-container>
+
+                <!-- Due Date -->
+                <ng-container matColumnDef="dueDate">
+                  <th mat-header-cell *matHeaderCellDef> Due Date </th>
+                  <td mat-cell *matCellDef="let assignment"> {{assignment.dueDate | date:'short'}} </td>
+                </ng-container>
+
+                <!-- Max Marks -->
+                <ng-container matColumnDef="maxMarks">
+                  <th mat-header-cell *matHeaderCellDef> Max Marks </th>
+                  <td mat-cell *matCellDef="let assignment"> {{assignment.maxMarks}} </td>
+                </ng-container>
+
+                <!-- Submission Type -->
+                <ng-container matColumnDef="submissionType">
+                  <th mat-header-cell *matHeaderCellDef> Type </th>
+                  <td mat-cell *matCellDef="let assignment">
+                    <mat-chip>{{assignment.submissionType}}</mat-chip>
+                  </td>
+                </ng-container>
+
+                <!-- Status -->
+                <ng-container matColumnDef="status">
+                  <th mat-header-cell *matHeaderCellDef> Status </th>
+                  <td mat-cell *matCellDef="let assignment">
+                    <!-- Student View: Show Submission Status -->
+                    <ng-container *ngIf="assignment.status; else instructorStatus">
+                      <mat-chip [color]="assignment.status === 'Pending' ? 'warn' : 'primary'">
+                        {{assignment.status}}
+                      </mat-chip>
+                    </ng-container>
+
+                    <!-- Instructor View: Show Publish Status -->
+                    <ng-template #instructorStatus>
+                      <mat-chip [color]="assignment.isPublished ? 'primary' : 'warn'">
+                        {{assignment.isPublished ? 'Published' : 'Draft'}}
+                      </mat-chip>
+                    </ng-template>
+                  </td>
+                </ng-container>
+
+                <!-- Created On -->
+                <ng-container matColumnDef="createdOn">
+                  <th mat-header-cell *matHeaderCellDef> Created </th>
+                  <td mat-cell *matCellDef="let assignment"> {{assignment.createdOn | date:'short'}} </td>
+                </ng-container>
+
+                <!-- Actions -->
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef> Actions </th>
+                  <td mat-cell *matCellDef="let assignment">
+                    <button mat-icon-button color="primary" (click)="viewAssignment(assignment.id)" matTooltip="View">
+                      <mat-icon>visibility</mat-icon>
+                    </button>
+                    <button mat-icon-button color="accent" (click)="editAssignment(assignment.id)" matTooltip="Edit">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" (click)="deleteAssignment(assignment.id, course.id)"
+                      matTooltip="Delete">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="viewSubmissions(assignment.id)" matTooltip="View Submissions">
+                      <mat-icon>inbox</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="assignmentColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: assignmentColumns;"></tr>
+              </table>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="course-row"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+
+      <!-- Row shown when there is no matching data -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No courses found matching "{{input.value}}"</td>
+      </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of courses"></mat-paginator>
+  </div>
+</div>

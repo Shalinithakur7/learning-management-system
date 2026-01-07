@@ -1,0 +1,179 @@
+<div *ngIf="loading" style="padding: 40px; text-align: center;">
+    <p>Loading course content...</p>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+
+<div *ngIf="error" style="padding: 40px; text-align: center;">
+    <h3 style="color: #f44336; margin-bottom: 20px;">{{error}}</h3>
+    <button mat-raised-button color="primary" (click)="loadCourseDetails()">
+        <mat-icon>refresh</mat-icon> Retry
+    </button>
+</div>
+
+<div class="course-details-container" *ngIf="course && !loading && !error">
+    <!-- Header -->
+    <div class="course-header">
+        <h1>{{course.title}}</h1>
+        <div class="course-meta">
+            <span>Instructor: {{course.instructorName}}</span>
+        </div>
+
+        <div class="progress-section">
+            <div class="flex justify-between mb-2">
+                <span>Course Progress</span>
+                <span>{{progress}}%</span>
+            </div>
+            <mat-progress-bar mode="determinate" [value]="progress"></mat-progress-bar>
+        </div>
+    </div>
+
+    <div class="content-grid">
+        <!-- Modules Sidebar -->
+        <div class="modules-list">
+            <mat-accordion>
+                <mat-expansion-panel *ngFor="let module of modules; let i = index" [expanded]="i === 0">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            {{module.title}}
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <div class="lesson-list">
+                        <div *ngFor="let lesson of module.lessons" class="lesson-item"
+                            [class.active]="currentLesson?.id === lesson.id" (click)="selectLesson(lesson)">
+                            <mat-icon color="primary">
+                                {{isLessonCompleted(lesson.id) ? 'check_circle' : 'play_circle_outline'}}
+                            </mat-icon>
+                            <span>{{lesson.title}}</span>
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+
+                <!-- Assignments Section -->
+                <mat-expansion-panel [expanded]="true">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Assignments
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <div class="lesson-list">
+                        <div *ngFor="let assignment of assignments" class="lesson-item"
+                            [class.active]="currentAssignment?.id === assignment.id"
+                            (click)="selectAssignment(assignment)">
+                            <mat-icon [color]="assignment.submissionStatus === 'Submitted' ? 'primary' : 'warn'">
+                                {{assignment.submissionStatus === 'Submitted' ? 'assignment_turned_in' : 'assignment'}}
+                            </mat-icon>
+                            <span>{{assignment.title}}</span>
+                        </div>
+                        <div *ngIf="assignments.length === 0" style="padding: 10px; color: #777;">
+                            No assignments
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+
+        <!-- Lesson Content -->
+        <div class="lesson-content" *ngIf="currentLesson && viewMode === 'lesson'">
+            <h2>{{currentLesson.title}}</h2>
+
+            <div class="video-container" *ngIf="currentLesson.videoUrl">
+                <!-- Video player placeholder -->
+                <mat-icon style="font-size: 48px; height: 48px; width: 48px;">play_circle_filled</mat-icon>
+            </div>
+
+            <div class="lesson-text">
+                <p>{{currentLesson.content}}</p>
+            </div>
+
+            <div class="lesson-actions">
+                <button mat-stroked-button (click)="previousLesson()" [disabled]="!hasPreviousLesson()">
+                    Previous
+                </button>
+                <button mat-raised-button color="primary" (click)="completeLesson()"
+                    *ngIf="!isLessonCompleted(currentLesson.id)">
+                    Mark as Complete
+                </button>
+                <button mat-stroked-button color="primary" *ngIf="isLessonCompleted(currentLesson.id)" disabled>
+                    <mat-icon>check</mat-icon> Completed
+                </button>
+                <button mat-stroked-button (click)="nextLesson()" [disabled]="!hasNextLesson()">
+                    Next
+                </button>
+            </div>
+        </div>
+
+        <!-- Assignment Content -->
+        <div class="lesson-content" *ngIf="currentAssignment && viewMode === 'assignment'" style="padding: 30px;">
+            <div style="margin-bottom: 20px;">
+                <h2 style="margin-bottom: 10px;">{{currentAssignment.title}}</h2>
+                <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                    <mat-chip-set>
+                        <mat-chip [highlighted]="currentAssignment.submissionStatus === 'Submitted'">
+                            {{currentAssignment.submissionStatus}}
+                        </mat-chip>
+                    </mat-chip-set>
+                    <span style="color: #666;">Due: {{currentAssignment.dueDate | date}}</span>
+                    <span style="color: #666;">Max Marks: {{currentAssignment.maxMarks}}</span>
+                </div>
+            </div>
+
+            <div class="lesson-text"
+                style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3 style="margin-top: 0;">Instructions</h3>
+                <p>{{currentAssignment.description}}</p>
+                <div *ngIf="currentAssignment.submissionType">
+                    <strong>Submission Type:</strong> {{currentAssignment.submissionType}}
+                </div>
+            </div>
+
+            <div class="submission-section" style="border-top: 1px solid #eee; padding-top: 20px;">
+                <div *ngIf="currentAssignment.submissionStatus === 'Pending'">
+                    <h3>Submit Assignment</h3>
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                        <mat-label>Your Answer / Link</mat-label>
+                        <textarea matInput [(ngModel)]="submissionText" rows="6"
+                            placeholder="Type your answer, essay, or paste a link to your work here..."></textarea>
+                    </mat-form-field>
+                    <div style="margin-top: 10px;">
+                        <button mat-raised-button color="primary" (click)="submitAssignment()"
+                            [disabled]="isSubmitting || !submissionText.trim()">
+                            <mat-icon>send</mat-icon>
+                            {{isSubmitting ? 'Submitting...' : 'Submit Assignment'}}
+                        </button>
+                    </div>
+                </div>
+
+                <div *ngIf="currentAssignment.submissionStatus !== 'Pending'">
+                    <h3>Your Submission</h3>
+                    <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; border: 1px solid #bbdefb;">
+                        <p style="margin-top: 0;"><strong>Submitted on:</strong>
+                            {{currentAssignment.submission?.submittedAt | date:'medium'}}</p>
+                        <div style="white-space: pre-wrap;">{{currentAssignment.submission?.content}}</div>
+                    </div>
+
+                    <div *ngIf="currentAssignment.submission?.grade !== null"
+                        style="margin-top: 20px; background: #e8f5e9; padding: 15px; border-radius: 8px; border: 1px solid #c8e6c9;">
+                        <h4 style="margin: 0 0 10px 0; color: #2e7d32;">Graded</h4>
+                        <p><strong>Score:</strong> {{currentAssignment.submission?.grade}} /
+                            {{currentAssignment.maxMarks}}</p>
+                        <p *ngIf="currentAssignment.submission?.feedback"><strong>Feedback:</strong>
+                            {{currentAssignment.submission?.feedback}}</p>
+                    </div>
+                    <div *ngIf="currentAssignment.submission?.grade === null"
+                        style="margin-top: 10px; color: #666; font-style: italic;">
+                        Waiting for grading...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="lesson-content empty" *ngIf="!currentLesson && !currentAssignment">
+            <div class="text-center p-8">
+                <mat-icon style="font-size: 64px; height: 64px; width: 64px; color: #ccc;">import_contacts</mat-icon>
+                <h3>Select a lesson to start learning</h3>
+            </div>
+        </div>
+    </div>
+</div>

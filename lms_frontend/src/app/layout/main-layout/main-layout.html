@@ -1,0 +1,13 @@
+<header class="topbar">
+  <span class="app-title">LMS</span>
+  <span class="spacer"></span>
+  <button mat-icon-button color="warn" (click)="logout()" matTooltip="Logout">
+    <mat-icon>logout</mat-icon>
+  </button>
+</header>
+
+<app-sidebar></app-sidebar>
+
+<main class="content">
+  <router-outlet></router-outlet>
+</main>

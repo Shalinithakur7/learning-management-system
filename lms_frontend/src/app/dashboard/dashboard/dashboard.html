@@ -1,0 +1,440 @@
+@if (loading) {
+<div class="loading-container">
+  <mat-spinner></mat-spinner>
+</div>
+} @else {
+@if (role === 'Student') {
+<!-- STUDENT DASHBOARD -->
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1 class="page-title">Welcome back, Student!</h1>
+    <p class="page-subtitle">Here is an overview of your learning progress.</p>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <mat-card class="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon-wrapper primary-bg">
+          <mat-icon>school</mat-icon>
+        </div>
+        <div class="stat-info">
+          <div class="stat-value">{{ studentStats.courses }}</div>
+          <div class="stat-label">Enrolled Courses</div>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon-wrapper accent-bg">
+          <mat-icon>assignment_turned_in</mat-icon>
+        </div>
+        <div class="stat-info">
+          <div class="stat-value">{{ studentStats.assignments }}</div>
+          <div class="stat-label">Assignments Sent</div>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon-wrapper warn-bg">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="stat-info">
+          <div class="stat-value">{{ studentStats.completed }}</div>
+          <div class="stat-label">Lessons Done</div>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon-wrapper success-bg">
+          <mat-icon>trending_up</mat-icon>
+        </div>
+        <div class="stat-info">
+          <div class="stat-value">{{ studentStats.progress }}%</div>
+          <div class="stat-label">Avg. Progress</div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="content-grid">
+    <!-- Enrolled Courses -->
+    <mat-card class="content-card full-width-card">
+      <mat-card-header>
+        <mat-card-title>My Courses</mat-card-title>
+        <span class="spacer"></span>
+        <button mat-stroked-button color="primary" routerLink="/courses">Browse All Courses</button>
+      </mat-card-header>
+      <mat-card-content class="table-container">
+        @if (studentEnrollments.length === 0) {
+        <div class="empty-state">
+          <mat-icon>import_contacts</mat-icon>
+          <p>You haven't enrolled in any courses yet.</p>
+          <button mat-raised-button color="primary" routerLink="/courses">Find a Course</button>
+        </div>
+        } @else {
+        <table mat-table [dataSource]="studentEnrollments">
+          <!-- Course Column -->
+          <ng-container matColumnDef="course">
+            <th mat-header-cell *matHeaderCellDef>Course ID</th>
+            <td mat-cell *matCellDef="let enrollment">
+              <span class="course-id-badge">#{{ enrollment.courseId }}</span>
+            </td>
+          </ng-container>
+
+          <!-- Progress Column -->
+          <ng-container matColumnDef="progress">
+            <th mat-header-cell *matHeaderCellDef>Progress</th>
+            <td mat-cell *matCellDef="let enrollment">
+              <div class="progress-wrapper">
+                <mat-progress-bar mode="determinate" [value]="getEnrollmentProgress(enrollment)"
+                  class="custom-progress"></mat-progress-bar>
+                <span class="progress-text">{{ getEnrollmentProgress(enrollment) }}%</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let enrollment">
+              <mat-chip [class.approved]="enrollment.status === 'Approved'"
+                [class.pending]="enrollment.status === 'Pending'" [class.rejected]="enrollment.status === 'Rejected'">
+                {{ enrollment.status }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let enrollment">
+              <button mat-mini-fab color="primary" [routerLink]="['/courses', enrollment.courseId]"
+                matTooltip="View Course">
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        }
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+}
+
+@else if (role === 'Instructor') {
+<!-- INSTRUCTOR DASHBOARD -->
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <div class="header-content">
+      <h2 class="page-title">Instructor Dashboard</h2>
+      <p class="page-subtitle">Manage your courses and student progress</p>
+    </div>
+    <div class="quick-actions">
+      <button mat-flat-button color="primary" routerLink="/courses/create">
+        <mat-icon>add</mat-icon> Create Course
+      </button>
+      <!-- Assignment creation usually happens within a course, but linking to assignments list for now -->
+      <button mat-stroked-button color="primary" routerLink="/assignments">
+        <mat-icon>add</mat-icon> Create Assignment
+      </button>
+    </div>
+  </div>
+
+  <!-- Section 1: SUMMARY CARDS -->
+  <div class="stats-grid">
+    <mat-card class="stat-card" routerLink="/courses/my" matRipple>
+      <div class="stat-content">
+        <div class="stat-icon-wrapper primary-bg">
+          <mat-icon>menu_book</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h3>{{ instructorStats.courses }}</h3>
+          <p>My Courses</p>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card" routerLink="/reports" matRipple>
+      <div class="stat-content">
+        <div class="stat-icon-wrapper accent-bg">
+          <mat-icon>people</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h3>{{ instructorStats.students }}</h3>
+          <p>Total Students</p>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card" routerLink="/assignments" matRipple>
+      <div class="stat-content">
+        <div class="stat-icon-wrapper warn-bg">
+          <mat-icon>assignment</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h3>{{ instructorStats.assignments }}</h3>
+          <p>Assignments</p>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card" routerLink="/submissions" matRipple>
+      <div class="stat-content">
+        <div class="stat-icon-wrapper success-bg">
+          <mat-icon>inbox</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h3>{{ instructorStats.pendingSubmissions }}</h3>
+          <p>Pending Submissions</p>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card" routerLink="/reports" matRipple>
+      <div class="stat-content">
+        <div class="stat-icon-wrapper primary-bg">
+          <mat-icon>bar_chart</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h3>{{ instructorStats.progress }}%</h3>
+          <p>Avg. Progress</p>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Section 2: MY COURSES -->
+  <mat-card class="table-card">
+    <mat-card-header>
+      <mat-card-title>My Courses</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      @if (instructorCourses.length === 0) {
+      <div class="empty-state">
+        <mat-icon>library_books</mat-icon>
+        <p>No courses created yet.</p>
+        <button mat-raised-button color="primary" routerLink="/courses/create">Create Course</button>
+      </div>
+      } @else {
+      <table mat-table [dataSource]="instructorCourses">
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>Course Name</th>
+          <td mat-cell *matCellDef="let course"><strong>{{ course.title }}</strong></td>
+        </ng-container>
+
+        <!-- Mocking these counts as they might not be on the main course object yet without extra join -->
+        <ng-container matColumnDef="students">
+          <th mat-header-cell *matHeaderCellDef>Students Enrolled</th>
+          <td mat-cell *matCellDef="let course">--</td>
+        </ng-container>
+
+        <ng-container matColumnDef="assignments">
+          <th mat-header-cell *matHeaderCellDef>Assignments</th>
+          <td mat-cell *matCellDef="let course">--</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let course">
+            <mat-chip [color]="course.status === 'Approved' ? 'primary' : 
+                               course.status === 'Rejected' ? 'warn' : 
+                               course.status === 'Pending' ? 'accent' : ''" [highlighted]="true">
+              {{ course.status === 'Pending' ? 'Pending Approval' : course.status }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let course">
+            <div class="action-buttons">
+              <button mat-icon-button color="primary" [routerLink]="['/courses', course.id]" matTooltip="View">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button *ngIf="course.status !== 'Pending'" mat-icon-button color="accent"
+                [routerLink]="['/courses/edit', course.id]" matTooltip="Edit">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button *ngIf="course.status !== 'Pending'" mat-icon-button color="warn" (click)="deleteCourse(course.id)"
+                matTooltip="Delete">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="instructorCourseColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: instructorCourseColumns;"></tr>
+      </table>
+      }
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Section 3: RECENT SUBMISSIONS -->
+  <mat-card class="table-card" style="margin-top: 24px;">
+    <mat-card-header>
+      <mat-card-title>Recent Submissions</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      @if (recentSubmissions.length === 0) {
+      <div class="empty-state">
+        <p>No recent submissions.</p>
+      </div>
+      } @else {
+      <table mat-table [dataSource]="recentSubmissions">
+        <ng-container matColumnDef="student">
+          <th mat-header-cell *matHeaderCellDef>Student Name</th>
+          <td mat-cell *matCellDef="let sub">{{ sub.studentName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="course">
+          <th mat-header-cell *matHeaderCellDef>Course</th>
+          <td mat-cell *matCellDef="let sub">{{ sub.courseTitle }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="assignment">
+          <th mat-header-cell *matHeaderCellDef>Assignment</th>
+          <td mat-cell *matCellDef="let sub">{{ sub.assignmentTitle }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="submitted">
+          <th mat-header-cell *matHeaderCellDef>Submitted On</th>
+          <td mat-cell *matCellDef="let sub">{{ sub.submittedOn | date:'short' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let sub">
+            <span [class.text-success]="sub.status === 'Graded'" [class.text-warn]="sub.status === 'Pending'">
+              {{ sub.status }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let sub">
+            <button mat-stroked-button color="primary" [routerLink]="['/submissions', sub.id]">
+              {{ sub.status === 'Pending' ? 'Grade' : 'View' }}
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="submissionColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: submissionColumns;"></tr>
+      </table>
+      }
+    </mat-card-content>
+  </mat-card>
+
+</div>
+}
+
+@else if (role === 'Admin') {
+<!-- ADMIN DASHBOARD -->
+<div class="dashboard-container">
+  <h2 class="page-title">Admin Dashboard</h2>
+
+  <div class="stats-grid">
+    <mat-card class="stat-card">
+      <div class="stat-content">
+        <mat-icon class="stat-icon primary">people</mat-icon>
+        <div class="stat-info">
+          <h3>{{ adminStats.users }}</h3>
+          <p>Total Users</p>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-content">
+        <mat-icon class="stat-icon accent">menu_book</mat-icon>
+        <div class="stat-info">
+          <h3>{{ adminStats.courses }}</h3>
+          <p>Total Courses</p>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-content">
+        <mat-icon class="stat-icon primary">how_to_reg</mat-icon>
+        <div class="stat-info">
+          <h3>{{ adminStats.enrollments }}</h3>
+          <p>Total Enrollments</p>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-content">
+        <mat-icon class="stat-icon warn">pending</mat-icon>
+        <div class="stat-info">
+          <h3>{{ adminStats.pending }}</h3>
+          <p>Pending Approvals</p>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <mat-card class="table-card">
+    <mat-card-header>
+      <mat-card-title>Pending Enrollments</mat-card-title>
+      <span class="spacer"></span>
+      <button mat-raised-button color="primary" routerLink="/enrollment">View All</button>
+    </mat-card-header>
+    <mat-card-content>
+      @if (pendingEnrollments.length === 0) {
+      <p class="empty-state">No pending enrollments</p>
+      } @else {
+      <table mat-table [dataSource]="pendingEnrollments" class="mat-elevation-z0">
+        <ng-container matColumnDef="courseId">
+          <th mat-header-cell *matHeaderCellDef>Course ID</th>
+          <td mat-cell *matCellDef="let enrollment">{{ enrollment.courseId }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="studentId">
+          <th mat-header-cell *matHeaderCellDef>Student ID</th>
+          <td mat-cell *matCellDef="let enrollment">{{ enrollment.studentId }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="enrolledOn">
+          <th mat-header-cell *matHeaderCellDef>Enrolled On</th>
+          <td mat-cell *matCellDef="let enrollment">{{ enrollment.enrolledOn | date:'short' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let enrollment">
+            <button mat-raised-button color="primary" (click)="approveEnrollment(enrollment.id)">
+              Approve
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['courseId', 'studentId', 'enrolledOn', 'action']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['courseId', 'studentId', 'enrolledOn', 'action'];"></tr>
+      </table>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>
+}
+@else {
+<div class="dashboard-container">
+  <h2 class="page-title">Access Limited</h2>
+  <p>Your role is: <strong>{{ role || 'None' }}</strong>. You do not have access to any dashboard.</p>
+</div>
+}
+}

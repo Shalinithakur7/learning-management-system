@@ -1,0 +1,36 @@
+<mat-form-field appearance="outline" style="width:100%; margin-bottom:24px;">
+  <mat-label>Search Courses</mat-label>
+  <input
+    matInput
+    type="text"
+    [(ngModel)]="filter"
+    placeholder="Search courses"
+  />
+</mat-form-field>
+
+<div class="course-grid">
+
+  <mat-card class="course-card" *ngFor="let c of filteredCourses()">
+
+    <h3>{{ c.title }}</h3>
+
+    <div class="actions">
+      <button
+        mat-button
+        color="primary"
+        (click)="viewCourse(c.id)">
+        View
+      </button>
+
+      <button
+        mat-button
+        color="warn"
+        *ngIf="isAdmin"
+        (click)="deleteCourse(c.id)">
+        Delete
+      </button>
+    </div>
+
+  </mat-card>
+
+</div>

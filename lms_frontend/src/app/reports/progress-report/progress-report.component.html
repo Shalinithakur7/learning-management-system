@@ -1,0 +1,68 @@
+<div class="report-container">
+    <div class="header">
+        <h1>Student Progress Report</h1>
+        <p>Track student completion status across courses.</p>
+    </div>
+
+    <mat-card class="table-card">
+        <div class="filter-container">
+            <input class="filter-input" (keyup)="applyFilter($event)" placeholder="Filter students or courses..."
+                #input>
+            <mat-icon>search</mat-icon>
+        </div>
+
+        <div class="table-container">
+            <table mat-table [dataSource]="dataSource" matSort>
+
+                <!-- Student Name Column -->
+                <ng-container matColumnDef="studentName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Student </th>
+                    <td mat-cell *matCellDef="let row">
+                        <div class="student-info">
+                            <mat-icon class="avatar-icon">account_circle</mat-icon>
+                            <div>
+                                <div class="student-name">{{row.studentName}}</div>
+                                <div class="student-email">{{row.studentEmail}}</div>
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <!-- Course Title Column -->
+                <ng-container matColumnDef="courseTitle">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Course </th>
+                    <td mat-cell *matCellDef="let row"> {{row.courseTitle}} </td>
+                </ng-container>
+
+                <!-- Completed Lessons Column -->
+                <ng-container matColumnDef="completedLessons">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Completed </th>
+                    <td mat-cell *matCellDef="let row">
+                        {{row.completedLessons}} / {{row.totalLessons}}
+                    </td>
+                </ng-container>
+
+                <!-- Progress Percentage Column -->
+                <ng-container matColumnDef="progressPercentage">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Progress </th>
+                    <td mat-cell *matCellDef="let row">
+                        <div class="progress-wrapper">
+                            <mat-progress-bar mode="determinate" [value]="row.progressPercentage"
+                                class="custom-progress"></mat-progress-bar>
+                            <span class="progress-text">{{row.progressPercentage | number:'1.0-0'}}%</span>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                </tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of reports"></mat-paginator>
+        </div>
+    </mat-card>
+</div>

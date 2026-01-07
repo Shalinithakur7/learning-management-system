@@ -1,0 +1,118 @@
+<div class="form-container">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>
+                <h2>{{isEditMode ? 'Edit Assignment' : 'Create New Assignment'}}</h2>
+            </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+            <form [formGroup]="assignmentForm">
+
+                <!-- Course Selection -->
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Course</mat-label>
+                    <mat-select formControlName="courseId" required>
+                        <mat-option *ngFor="let course of courses" [value]="course.id">
+                            {{course.title}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="assignmentForm.get('courseId')?.hasError('required')">
+                        Course is required
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Assignment Title -->
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Assignment Title</mat-label>
+                    <input matInput formControlName="title" placeholder="Ex. Week 1 Quiz" required>
+                    <mat-icon matSuffix>title</mat-icon>
+                    <mat-error *ngIf="assignmentForm.get('title')?.hasError('required')">
+                        Title is required
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Description -->
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput formControlName="description" rows="3"
+                        placeholder="Brief description of the assignment" required></textarea>
+                    <mat-error *ngIf="assignmentForm.get('description')?.hasError('required')">
+                        Description is required
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Due Date and Max Marks Row -->
+                <div class="form-row">
+                    <mat-form-field appearance="outline" class="half-width">
+                        <mat-label>Due Date</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="dueDate" required>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <mat-error *ngIf="assignmentForm.get('dueDate')?.hasError('required')">
+                            Due date is required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="half-width">
+                        <mat-label>Max Marks</mat-label>
+                        <input matInput type="number" formControlName="maxMarks" placeholder="100" required>
+                        <mat-icon matSuffix>grade</mat-icon>
+                        <mat-error *ngIf="assignmentForm.get('maxMarks')?.hasError('required')">
+                            Max marks is required
+                        </mat-error>
+                        <mat-error *ngIf="assignmentForm.get('maxMarks')?.hasError('min')">
+                            Must be at least 1
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <!-- Submission Type -->
+                <div class="form-section">
+                    <label class="section-label">Submission Type</label>
+                    <mat-radio-group formControlName="submissionType" class="radio-group">
+                        <mat-radio-button value="File">File Upload</mat-radio-button>
+                        <mat-radio-button value="Text">Text Submission</mat-radio-button>
+                        <mat-radio-button value="Both">Both</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+                <!-- Allow Late Submission -->
+                <div class="form-section">
+                    <mat-checkbox formControlName="allowLateSubmission">
+                        Allow Late Submission
+                    </mat-checkbox>
+                </div>
+
+                <!-- Instructions -->
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Instructions</mat-label>
+                    <textarea matInput formControlName="instructions" rows="5"
+                        placeholder="Detailed instructions for students"></textarea>
+                </mat-form-field>
+
+                <!-- Publish Toggle -->
+                <div class="form-section publish-section">
+                    <mat-slide-toggle formControlName="isPublished" color="primary">
+                        Publish Assignment
+                    </mat-slide-toggle>
+                    <p class="helper-text">Published assignments are visible to students</p>
+                </div>
+
+            </form>
+        </mat-card-content>
+
+        <mat-card-actions align="end">
+            <button mat-button (click)="cancel()" [disabled]="loading">
+                <mat-icon>cancel</mat-icon> Cancel
+            </button>
+            <button mat-raised-button (click)="saveAsDraft()" [disabled]="loading || assignmentForm.invalid">
+                <mat-icon>save</mat-icon> Save as Draft
+            </button>
+            <button mat-raised-button color="primary" (click)="publishAssignment()"
+                [disabled]="loading || assignmentForm.invalid">
+                <mat-icon>publish</mat-icon> {{isEditMode ? 'Update' : 'Publish'}} Assignment
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</div>

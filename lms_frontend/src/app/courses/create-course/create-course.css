@@ -1,0 +1,415 @@
+/* Main Container */
+.create-course-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Header Section */
+.header-section {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header-section h2 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #1a237e;
+    /* Deep indigo */
+    margin: 0 0 8px 0;
+}
+
+.subtitle-text {
+    color: #666;
+    font-size: 16px;
+}
+
+/* Step Form Container */
+.step-form-container {
+    padding: 20px 0;
+}
+
+.form-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0f0f0;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e8eaf6;
+}
+
+.header-icon {
+    color: #3949ab;
+    font-size: 28px;
+    height: 28px;
+    width: 28px;
+}
+
+.card-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.half-width {
+    width: 48%;
+}
+
+.form-actions {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.action-btn {
+    padding: 8px 24px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.white-spinner circle {
+    stroke: white !important;
+}
+
+/* Curriculum Builder */
+.curriculum-builder-container {
+    padding: 10px 0;
+}
+
+.builder-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 30px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.module-title-input {
+    width: 250px;
+    margin-bottom: -4px;
+}
+
+.header-info h3 {
+    font-size: 22px;
+    color: #2c3e50;
+    margin: 0 0 6px 0;
+    font-weight: 600;
+}
+
+.header-info p {
+    margin: 0;
+    color: #7f8c8d;
+}
+
+/* Module List */
+.modules-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.module-card {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid #eee;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.module-card:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* Colorful Module Headers */
+.module-header {
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+}
+
+/* Palette for headers */
+.color-header-0 {
+    background: linear-gradient(135deg, #5c6bc0, #3949ab);
+}
+
+/* Indigo */
+.color-header-1 {
+    background: linear-gradient(135deg, #26a69a, #00897b);
+}
+
+/* Teal */
+.color-header-2 {
+    background: linear-gradient(135deg, #ef5350, #e53935);
+}
+
+/* Red */
+.color-header-3 {
+    background: linear-gradient(135deg, #ffa726, #fb8c00);
+}
+
+/* Orange */
+.color-header-4 {
+    background: linear-gradient(135deg, #7e57c2, #5e35b1);
+}
+
+/* Deep Purple */
+
+.module-title-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.module-icon {
+    opacity: 0.9;
+}
+
+.module-title-text {
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: 0.3px;
+}
+
+.lesson-count-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+.delete-module-btn {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.delete-module-btn:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Module Content */
+.module-content {
+    padding: 0;
+}
+
+/* Lessons List */
+.lessons-list {
+    background: #fff;
+}
+
+.lesson-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.lesson-row:last-child {
+    border-bottom: none;
+}
+
+.lesson-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.lesson-type-icon {
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+}
+
+.video-icon {
+    color: #e91e63;
+}
+
+.text-icon {
+    color: #1976d2;
+}
+
+.lesson-title {
+    color: #333;
+    font-size: 15px;
+}
+
+.delete-lesson-btn {
+    opacity: 0.5;
+    transform: scale(0.9);
+}
+
+.delete-lesson-btn:hover {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.empty-lessons-placeholder {
+    padding: 20px;
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    background: #fafafa;
+}
+
+/* Add Lesson Section */
+.add-lesson-section {
+    border-top: 1px solid #eee;
+}
+
+.add-lesson-panel {
+    background: #fdfdfd !important;
+    box-shadow: none !important;
+}
+
+.new-lesson-form {
+    padding: 15px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.lesson-type-toggle label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #555;
+    font-weight: 500;
+}
+
+.file-upload-wrapper {
+    margin-top: 5px;
+}
+
+.file-input {
+    display: none;
+}
+
+.file-upload-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.2s;
+    background: #fafafa;
+}
+
+.file-upload-label:hover {
+    border-color: #3f51b5;
+    background: #e8eaf6;
+    color: #3f51b5;
+}
+
+.add-lesson-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 8px;
+}
+
+/* Add New Module Card */
+.add-module-container {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.add-module-card {
+    background: #fff;
+    border: 2px dashed #e0e0e0;
+    border-radius: 12px;
+    padding: 24px;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.add-module-card h4 {
+    margin-top: 0;
+    color: #555;
+}
+
+.add-module-form {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+}
+
+.module-input {
+    width: 300px;
+    margin-bottom: 0;
+}
+
+.add-module-btn {
+    height: 48px;
+}
+
+/* Final Actions */
+.final-actions {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.finish-btn {
+    padding: 0 32px;
+    font-size: 16px;
+    height: 48px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+
+    .half-width,
+    .add-module-form,
+    .module-input {
+        width: 100%;
+    }
+
+    .add-module-form {
+        flex-direction: column;
+    }
+
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

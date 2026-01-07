@@ -1,0 +1,108 @@
+.report-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    margin-bottom: 24px;
+}
+
+.header h1 {
+    font-size: 2rem;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.header p {
+    color: #666;
+    font-size: 1rem;
+}
+
+.table-card {
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+    border-radius: 8px;
+}
+
+.filter-container {
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    background-color: #f9fafb;
+    border-bottom: 1px solid #eee;
+}
+
+.filter-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 8px;
+    font-size: 16px;
+    outline: none;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+}
+
+th.mat-header-cell {
+    font-weight: 600;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+td.mat-cell {
+    color: #333;
+    padding: 12px 24px;
+}
+
+.student-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar-icon {
+    color: #ccc;
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+}
+
+.student-name {
+    font-weight: 500;
+    color: #333;
+}
+
+.student-email {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.progress-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 150px;
+}
+
+.custom-progress {
+    flex: 1;
+    height: 8px;
+    border-radius: 4px;
+}
+
+.progress-text {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #555;
+    min-width: 35px;
+    text-align: right;
+}
