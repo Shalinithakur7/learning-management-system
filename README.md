@@ -27,6 +27,7 @@ The frontend is configured to connect to the backend API at:
 
 Make sure the backend is running on port 5012 before starting the frontend.
 
+I have used .net 8
 
   credentials
 
